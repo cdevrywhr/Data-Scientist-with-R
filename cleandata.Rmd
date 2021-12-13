@@ -1,0 +1,97 @@
+---
+title: "#1 CLEAN DATA"
+output: html_notebook
+---
+
+```{r}
+library(readxl)
+```
+Read dataset
+
+```{r}
+brooklyn <- read_excel("rollingsales_brooklyn.xlsx",skip=4)
+```
+melihat data menggunakan tidyverse
+import labrary
+
+```{r}
+library(tidyverse)
+library(tidyr)
+```
+Melihat data menggunakan fungsi glimpse()
+```{r}
+glimpse(brooklyn)
+```
+cek tipe data 
+```{r}
+mean(brooklyn$'SALE PRICE')
+```
+plot data brooklyn
+
+qplot('SALE DATE', data=brooklyn)
+```{r}
+qplot(brooklyn$'SALE DATE', bins=12)
+```
+
+combining dataset
+
+```{r}
+bronx <- read_excel("rollingsales_bronx.xlsx",skip=4)
+
+manhattan <- read_excel("rollingsales_manhattan.xlsx",skip=4)
+
+state_island <- read_excel("rollingsales_statenisland.xlsx",skip=4)
+
+queens <- read_excel("rollingsales_queens.xlsx",skip=4)
+```
+
+
+```{r}
+NYX_property_sales <- bind_rows(brooklyn,bronx,manhattan,state_island,queens)
+
+glimpse(NYX_property_sales)
+```
+
+merubah nama kolom dari dataset dgn magrittr
+
+```{r}
+library(magrittr)
+```
+
+
+
+```{r}
+colnames(NYX_property_sales) %<>% str_replace_all("\\s", "_") %<>% tolower()
+```
+
+
+```{r}
+colnames(NYX_property_sales)
+```
+
+
+```{r}
+NYX_property_sales %>% glimpse()
+```
+menghilangkan data yg memiliki nilai NA
+
+```{r}
+#mengecek jumlah data yg mengandung NA
+sum(is.na(NYX_property_sales))
+
+#drop kolom 
+NYX_property_sales <- NYX_property_sales[,-10]
+NYX_property_sales <- NYX_property_sales[,-7]
+
+```
+
+```{r}
+glimpse(NYX_property_sales)
+```
+
+
+```{r}
+
+qplot(NYX_property_sales$'sale_date',bins=13)
+```
+
